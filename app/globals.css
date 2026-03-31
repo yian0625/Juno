@@ -1,0 +1,445 @@
+@import "tailwindcss";
+
+/* Tailwind v4: 显式定义 dark mode 只根据 .dark class，忽略系统偏好 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  /* Enhanced color palette with better contrast and visual appeal */
+  --background: oklch(0.98 0 0);
+  --foreground: oklch(0.15 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.15 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.15 0 0);
+  --primary: oklch(0.18 0 0);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.15 0 0);
+  --muted: oklch(0.95 0 0);
+  --muted-foreground: oklch(0.5 0 0);
+  --accent: oklch(0.96 0 0);
+  --accent-foreground: oklch(0.15 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.92 0 0);
+  --input: oklch(0.92 0 0);
+  --ring: oklch(0.7 0 0);
+  --radius: 0.75rem;
+  --sidebar: oklch(0.97 0 0);
+  --sidebar-foreground: oklch(0.15 0 0);
+  --sidebar-primary: oklch(0.15 0 0);
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent: oklch(0.94 0 0);
+  --sidebar-accent-foreground: oklch(0.15 0 0);
+  --sidebar-border: oklch(0.92 0 0);
+  --sidebar-ring: oklch(0.7 0 0);
+
+  /* Code block background colors */
+  --color-pie-code-bg: #ECECEC;
+  --color-pie-overlay-dark-quinary: rgba(175, 184, 193, 0.2);
+}
+
+.dark {
+  /* Refined dark mode colors with better depth and contrast */
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.95 0 0);
+  --card: oklch(0.17 0 0);
+  --card-foreground: oklch(0.95 0 0);
+  --popover: oklch(0.17 0 0);
+  --popover-foreground: oklch(0.95 0 0);
+  --primary: oklch(0.85 0 0);
+  --primary-foreground: oklch(0.15 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.95 0 0);
+  --muted: oklch(0.25 0 0);
+  --muted-foreground: oklch(0.65 0 0);
+  --accent: oklch(0.22 0 0);
+  --accent-foreground: oklch(0.95 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.28 0 0);
+  --input: oklch(0.28 0 0);
+  --ring: oklch(0.5 0 0);
+  --sidebar: oklch(0.15 0 0);
+  --sidebar-foreground: oklch(0.95 0 0);
+  --sidebar-primary: oklch(0.95 0 0);
+  --sidebar-primary-foreground: oklch(0.13 0 0);
+  --sidebar-accent: oklch(0.22 0 0);
+  --sidebar-accent-foreground: oklch(0.95 0 0);
+  --sidebar-border: oklch(0.28 0 0);
+  --sidebar-ring: oklch(0.5 0 0);
+
+  /* Code block background colors - 比页面背景 #202020 更亮，形成对比 */
+  --color-pie-code-bg: #2D2D2D;
+  --color-pie-overlay-dark-quinary: rgba(110, 118, 129, 0.4);
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply bg-background;
+  }
+
+  html {
+    background: #F3F3F3 !important;
+  }
+
+  html.dark {
+    background: #202020 !important;
+  }
+
+  body {
+    @apply text-foreground;
+    background: #F3F3F3 !important;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body.dark,
+  .dark body {
+    background: #202020 !important;
+  }
+
+  /* 全局文字默认使用较细的字重 */
+  p, div, span, a, button, input, textarea {
+    font-weight: 400;
+  }
+
+  /* 标题使用更细的字重 */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 400;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 3s linear infinite;
+  background-size: 200% 100%;
+}
+
+/* Markdown 样式 - 简化版，依赖 streamdown 默认样式 */
+.stream-markdown {
+  letter-spacing: 0.03em;
+  line-height: 1.75;
+}
+
+/* TipTap 编辑器输入法修复 */
+.ProseMirror {
+  /* 确保输入法组合文字正常显示 */
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 输入法组合态（IME composition）的样式 */
+.ProseMirror [data-text-decoration] {
+  text-decoration: inherit !important;
+}
+
+/* 飞书文档样式 */
+.article-content.feishu-doc h1 {
+  @apply text-3xl font-bold mt-8 mb-4;
+}
+
+.article-content.feishu-doc h2 {
+  @apply text-2xl font-bold mt-6 mb-3;
+}
+
+.article-content.feishu-doc h3 {
+  @apply text-xl font-bold mt-4 mb-2;
+}
+
+.article-content.feishu-doc p {
+  @apply mb-4 leading-relaxed;
+}
+
+.article-content.feishu-doc ul,
+.article-content.feishu-doc ol {
+  @apply my-4 pl-6;
+}
+
+.article-content.feishu-doc li {
+  @apply mb-2;
+}
+
+.article-content.feishu-doc blockquote {
+  @apply border-l-4 border-[#575752] pl-4 py-2 my-4 italic;
+}
+
+.article-content.feishu-doc pre {
+  @apply bg-gray-50 dark:bg-gray-900 rounded-lg p-4 my-4 overflow-x-auto;
+}
+
+.article-content.feishu-doc code {
+  @apply bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-sm font-mono;
+}
+
+.article-content.feishu-doc img {
+  @apply rounded-xl shadow-lg my-6 max-w-full h-auto;
+}
+
+.article-content.feishu-doc hr {
+  @apply border-gray-200 dark:border-gray-700 my-8;
+}
+
+/* Custom Scrollbar for Music Player */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.3);
+  border-radius: 10px;
+  transition: background 0.2s;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.5);
+}
+
+/* Smooth fade-in animation */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out;
+}
+
+/* Vinyl Record Animation */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}
+
+.paused-spin {
+  animation-play-state: paused;
+}
+
+/* Dark Scrollbar for Music Player */
+.custom-scrollbar-dark::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar-dark::-webkit-scrollbar-track {
+  background: rgba(31, 41, 55, 0.3);
+  border-radius: 10px;
+}
+
+.custom-scrollbar-dark::-webkit-scrollbar-thumb {
+  background: rgba(75, 85, 99, 0.5);
+  border-radius: 10px;
+  transition: background 0.2s;
+}
+
+.custom-scrollbar-dark::-webkit-scrollbar-thumb:hover {
+  background: rgba(107, 114, 128, 0.7);
+}
+
+/* Mobile Navigation Slide-in Animation */
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.3s ease-out;
+}
+
+/* Fade-in Animation */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out;
+}
+
+/* Touch-friendly scrolling for mobile */
+.scroll-smooth {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* BubblesLoading Animation */
+@keyframes bubble {
+  0%, 80%, 100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.bubbles-loading circle {
+  animation: bubble 1.4s infinite ease-in-out;
+}
+
+.bubbles-loading circle:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.bubbles-loading circle:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+.bubbles-loading circle:nth-child(3) {
+  animation-delay: 0s;
+}
+
+/* Prevent horizontal overflow on mobile */
+body {
+  overflow-x: hidden;
+}
+
+/* 覆盖 rehype-github-alerts 的系统偏好查询 */
+/* 强制使用 .dark class 而不是 prefers-color-scheme */
+:root {
+  --rehype-github-alerts-default-color: rgb(89, 99, 110);
+  --rehype-github-alerts-note-color: rgb(9, 105, 218);
+  --rehype-github-alerts-tip-color: rgb(26, 127, 55);
+  --rehype-github-alerts-important-color: rgb(130, 80, 223);
+  --rehype-github-alerts-warning-color: rgb(154, 103, 0);
+  --rehype-github-alerts-caution-color: rgb(209, 36, 47);
+}
+
+.dark {
+  --rehype-github-alerts-default-color: rgb(145, 152, 161);
+  --rehype-github-alerts-note-color: rgb(68, 147, 248);
+  --rehype-github-alerts-tip-color: rgb(63, 185, 80);
+  --rehype-github-alerts-important-color: rgb(171, 125, 248);
+  --rehype-github-alerts-warning-color: rgb(210, 153, 34);
+  --rehype-github-alerts-caution-color: rgb(248, 81, 73);
+}
+
+
+/* ========================================
+   StreamMarkdown 代码块样式
+   完全复制自 wechat-front-main/src/styles/streamdown.css
+   ======================================== */
+
+/* code block - 使用 CSS 变量确保样式生效 */
+div[data-code-block-container] {
+  border: none !important;
+  margin: 1rem 0 !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+}
+
+div[data-code-block-header='true'],
+div[data-streamdown='code-block'] > pre {
+  background-color: var(--color-pie-code-bg) !important;
+  padding: 12px 16px !important;
+  margin: 0 !important;
+}
+
+div[data-streamdown='code-block'] {
+  border-top: none !important;
+}
+
+/* 代码块字体 */
+div[data-streamdown='code-block'] pre,
+div[data-streamdown='code-block'] code {
+  font-size: 13px !important;
+  line-height: 1.6 !important;
+  font-family: var(--font-mono), 'Menlo', 'Monaco', 'Courier New', monospace !important;
+}
+
+/* 深色模式下增强代码颜色对比度 - 针对 Shiki 生成的 span 元素 */
+.dark div[data-streamdown='code-block'] pre span,
+.dark div[data-streamdown='code-block'] code span {
+  filter: brightness(1.5) contrast(1.1) !important;
+}
+
+.dark div[data-streamdown='code-block'] pre,
+.dark div[data-streamdown='code-block'] code {
+  color: #e0e0e0 !important;
+}
+
+code[data-streamdown='inline-code'] {
+  border-radius: 4px !important;
+  padding: 2px 6px !important;
+  font-size: 0.9em !important;
+  background: var(--color-pie-overlay-dark-quinary) !important;
+}
