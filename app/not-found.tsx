@@ -11,7 +11,7 @@ export default function NotFound() {
   const router = useRouter()
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background">
+    <div className="flex items-center justify-center min-h-screen">
       <div className="text-center px-4">
         <h1 className="text-6xl font-bold text-foreground mb-4">404</h1>
         <p className="text-xl text-muted-foreground mb-8">页面未找到</p>

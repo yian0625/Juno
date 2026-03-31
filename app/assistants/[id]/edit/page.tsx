@@ -160,8 +160,8 @@ export default function EditAssistantPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur">
+    <div className="min-h-screen">
+      <header className="glass-header sticky top-0 z-50">
         <div className="container flex h-14 items-center justify-between px-4 mx-auto max-w-3xl">
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="icon" onClick={() => router.back()}>

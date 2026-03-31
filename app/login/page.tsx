@@ -140,7 +140,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-background via-background to-muted/20 p-4">
+    <div className="flex min-h-screen items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <h1 className="bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text font-serif text-4xl font-bold italic tracking-wide text-transparent">
@@ -150,7 +150,7 @@ export default function LoginPage() {
         </div>
 
         <Tabs defaultValue="login" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="glass-light grid w-full grid-cols-2 rounded-xl">
             <TabsTrigger value="login">登录</TabsTrigger>
             <TabsTrigger value="register">注册</TabsTrigger>
           </TabsList>
@@ -197,7 +197,7 @@ export default function LoginPage() {
                     <span className="w-full border-t" />
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-card px-2 text-muted-foreground">或者</span>
+                    <span className="px-2 text-muted-foreground">或者</span>
                   </div>
                 </div>
 
