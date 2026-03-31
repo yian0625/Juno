@@ -18,7 +18,7 @@ import {
   PlusIcon, PanelLeft, PanelLeftClose, Send, Square,
   Moon, Sun, Edit2, Check, X, Settings, Trash2,
   MoreVertical, Copy, RefreshCw, Server, Database,
-  LogOut, ChevronRight, MessageSquare,
+  LogOut, ChevronRight, MessageSquare, Home, Bot,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { assistantAPI, topicAPI, chatAPI, getUser, getToken, removeToken, removeUser } from "@/lib/api"
@@ -281,7 +281,7 @@ export default function MainPage() {
       const token = getToken()
       if (!token) throw new Error("未登录")
 
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL
+      const apiUrl = ''
       const response = await fetch(`${apiUrl}/chat_api/completions`, {
         method: "POST",
         headers: {
@@ -384,42 +384,83 @@ export default function MainPage() {
   }
 
   return (
-    <div className="flex h-screen flex-col bg-background">
-      {/* 顶部导航 */}
-      <header className="flex items-center justify-between border-b px-4 h-12 shrink-0 bg-background">
+    <div className="flex flex-col h-screen">
+      {/* TOP NAV BAR - NEW */}
+      <div className="glass-header flex items-center justify-between h-11 px-4 shrink-0">
+        {/* Left: sidebar toggle + Juno logo */}
         <div className="flex items-center gap-3">
-          <h1 className="font-serif text-lg font-bold italic tracking-wide text-foreground">Juno</h1>
+          <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => setSidebarOpen(!sidebarOpen)}>
+            {sidebarOpen ? <PanelLeftClose className="h-4 w-4" /> : <PanelLeft className="h-4 w-4" />}
+          </Button>
+          <h1 className="font-serif text-xl font-bold italic tracking-wide text-foreground">Juno</h1>
         </div>
-        <nav className="flex items-center gap-1">
-          <Button variant="ghost" size="sm" onClick={() => router.push("/mcp")}>
-            <Server className="h-4 w-4 mr-1" />
-            MCP
-          </Button>
-          <Button variant="ghost" size="sm" onClick={() => router.push("/knowledge")}>
-            <Database className="h-4 w-4 mr-1" />
-            知识库
-          </Button>
+        
+        {/* Center-left: 首页/智能体 tabs */}
+        <div className="flex items-center gap-6 flex-1 ml-6">
+          <button className="relative py-2.5 text-sm font-medium text-foreground transition-colors flex items-center gap-1.5">
+            <Home className="h-4 w-4" />
+            首页
+            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-500 rounded-full" />
+          </button>
+          <button 
+            className="relative py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5"
+            onClick={() => router.push("/assistants/new")}
+          >
+            <Bot className="h-4 w-4" />
+            智能体
+          </button>
+        </div>
+
+        {/* Right: MCP, Knowledge, Theme, Logout */}
+        <div className="flex items-center gap-1">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => router.push("/mcp")}>
+                <Server className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>MCP 服务</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => router.push("/knowledge")}>
+                <Database className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>知识库</TooltipContent>
+          </Tooltip>
           {mounted && (
-            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}>
-              {resolvedTheme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}>
+                  {resolvedTheme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>切换主题</TooltipContent>
+            </Tooltip>
           )}
-          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={handleLogout}>
-            <LogOut className="h-4 w-4" />
-          </Button>
-        </nav>
-      </header>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={handleLogout}>
+                <LogOut className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>退出登录</TooltipContent>
+          </Tooltip>
+        </div>
+      </div>
 
       <div className="flex flex-1 min-h-0">
         {/* 左侧栏 */}
         <div
           className={cn(
-            "flex flex-col border-r bg-muted/20 transition-all duration-200 shrink-0",
+            "glass-sidebar flex flex-col transition-all duration-200 shrink-0",
             sidebarOpen ? "w-[280px]" : "w-0 overflow-hidden"
           )}
         >
+
           {/* 助手 / 话题 切换 Tab */}
-          <div className="flex border-b shrink-0">
+          <div className="flex border-b border-[var(--glass-border-subtle)] shrink-0">
             <button
               className={cn(
                 "flex-1 py-2.5 text-sm font-medium text-center relative transition-colors",
@@ -429,7 +470,7 @@ export default function MainPage() {
             >
               助手
               {sidebarTab === "assistants" && (
-                <span className="absolute bottom-0 left-1/4 right-1/4 h-0.5 bg-primary rounded-full" />
+                <span className="absolute bottom-0 left-[15%] right-[15%] h-[2px] bg-emerald-500 rounded-full" />
               )}
             </button>
             <button
@@ -441,7 +482,7 @@ export default function MainPage() {
             >
               话题
               {sidebarTab === "topics" && (
-                <span className="absolute bottom-0 left-1/4 right-1/4 h-0.5 bg-primary rounded-full" />
+                <span className="absolute bottom-0 left-[15%] right-[15%] h-[2px] bg-emerald-500 rounded-full" />
               )}
             </button>
           </div>
@@ -453,7 +494,7 @@ export default function MainPage() {
                 {/* 添加助手按钮 */}
                 <button
                   onClick={() => router.push("/assistants/new")}
-                  className="flex items-center gap-2 w-full px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent/50 rounded-md transition-colors mb-1"
+                  className="flex items-center gap-2 w-full px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-[var(--glass-bg-light)] rounded-md transition-colors mb-1"
                 >
                   <PlusIcon className="h-4 w-4" />
                   添加助手
@@ -465,7 +506,7 @@ export default function MainPage() {
                     key={a.id}
                     className={cn(
                       "flex items-center gap-2.5 px-3 py-2 rounded-md cursor-pointer group transition-colors",
-                      a.id === currentAssistantId ? "bg-accent" : "hover:bg-accent/50"
+                      a.id === currentAssistantId ? "bg-[var(--glass-bg-heavy)] border-l-2 border-emerald-500" : "hover:bg-[var(--glass-bg-light)] border-l-2 border-transparent"
                     )}
                     onClick={() => selectAssistant(a.id)}
                   >
@@ -505,10 +546,21 @@ export default function MainPage() {
               </div>
             ) : (
               <div className="p-2">
+                {/* 当前助手信息 */}
+                {currentAssistant && (
+                  <div className="flex items-center gap-2 px-3 py-2 mb-2 border-b border-[var(--glass-border-subtle)]">
+                    <Avatar className="h-6 w-6 shrink-0">
+                      <AvatarImage src={currentAssistant.avatar_url} />
+                      <AvatarFallback className="text-xs">{currentAssistant.name.slice(0, 1)}</AvatarFallback>
+                    </Avatar>
+                    <span className="text-sm font-medium truncate">{currentAssistant.name}</span>
+                  </div>
+                )}
+
                 {/* 新建话题 */}
                 <button
                   onClick={handleNewTopic}
-                  className="flex items-center gap-2 w-full px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent/50 rounded-md transition-colors mb-1"
+                  className="flex items-center gap-2 w-full px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-[var(--glass-bg-light)] rounded-md transition-colors mb-1"
                 >
                   <PlusIcon className="h-4 w-4" />
                   新对话
@@ -520,7 +572,7 @@ export default function MainPage() {
                     key={topic.id}
                     className={cn(
                       "group flex items-center gap-1 rounded-md px-3 py-2 text-sm cursor-pointer transition-colors",
-                      topic.id === currentTopicId ? "bg-accent" : "hover:bg-accent/50"
+                      topic.id === currentTopicId ? "bg-[var(--glass-bg-heavy)] border-l-2 border-emerald-500" : "hover:bg-[var(--glass-bg-light)] border-l-2 border-transparent"
                     )}
                     onClick={() => handleSelectTopic(topic.id)}
                   >
@@ -577,23 +629,26 @@ export default function MainPage() {
               </div>
             )}
           </div>
+
+          {/* 底部用户信息 */}
+          <div className="flex items-center gap-3 px-4 py-3.5 border-t border-[var(--glass-border-subtle)] shrink-0 hover:bg-[var(--glass-bg-light)] rounded-lg mx-2 mb-2 cursor-pointer transition-colors group">
+            <Avatar className="h-9 w-9 shrink-0">
+              <AvatarFallback className="text-sm font-semibold bg-gradient-to-br from-violet-500 to-indigo-600 text-white">{user?.nickname?.slice(0, 1) || "U"}</AvatarFallback>
+            </Avatar>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium truncate">{user?.nickname || "用户"}</p>
+              <p className="text-xs text-muted-foreground truncate">在线</p>
+            </div>
+            <Settings className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+          </div>
+
         </div>
 
         {/* 右侧聊天区 */}
         <div className="flex-1 flex flex-col min-w-0">
           {/* 聊天顶栏 */}
-          <div className="flex items-center justify-between border-b px-4 h-11 shrink-0">
+          <div className="flex items-center justify-between px-4 h-12 shrink-0 border-b border-border/50">
             <div className="flex items-center gap-2 min-w-0">
-              {!sidebarOpen && (
-                <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => setSidebarOpen(true)}>
-                  <PanelLeft className="h-4 w-4" />
-                </Button>
-              )}
-              {sidebarOpen && (
-                <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => setSidebarOpen(false)}>
-                  <PanelLeftClose className="h-4 w-4" />
-                </Button>
-              )}
               {currentAssistant && (
                 <div className="flex items-center gap-2 min-w-0 text-sm">
                   <Avatar className="h-6 w-6 shrink-0">
@@ -635,8 +690,8 @@ export default function MainPage() {
           <div className="flex-1 overflow-y-auto">
             {!currentAssistantId ? (
               <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
-                <MessageSquare className="h-12 w-12 mb-4 opacity-30" />
-                <p className="text-lg mb-1">欢迎使用 Juno</p>
+                <MessageSquare className="h-12 w-12 mb-6 opacity-50 text-emerald-500" />
+                <p className="text-xl mb-2 font-medium text-foreground">欢迎使用 Juno</p>
                 <p className="text-sm">从左侧选择一个助手开始对话</p>
               </div>
             ) : messages.length === 0 && !isLoadingMessages ? (
@@ -754,8 +809,8 @@ export default function MainPage() {
 
           {/* 输入区 */}
           {currentAssistantId > 0 && (
-            <div className="border-t px-6 py-3 shrink-0">
-              <div className="max-w-4xl mx-auto flex gap-2 items-end">
+            <div className="px-6 pb-4 shrink-0">
+              <div className="glass rounded-2xl max-w-4xl mx-auto p-4">
                 <textarea
                   ref={inputRef}
                   value={inputValue}
@@ -763,7 +818,7 @@ export default function MainPage() {
                   onKeyDown={handleKeyDown}
                   placeholder="在这里输入消息，按 Enter 发送"
                   rows={1}
-                  className="flex-1 resize-none rounded-lg border bg-background px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring min-h-[40px] max-h-[160px]"
+                  className="w-full bg-transparent resize-none px-2 py-1 text-sm focus:outline-none min-h-[24px] max-h-[160px] placeholder:text-muted-foreground/50"
                   style={{ height: "auto", overflow: "hidden" }}
                   onInput={(e) => {
                     const target = e.target as HTMLTextAreaElement
@@ -772,20 +827,26 @@ export default function MainPage() {
                   }}
                   disabled={isStreaming}
                 />
-                {isStreaming ? (
-                  <Button size="icon" variant="destructive" onClick={handleStop} className="shrink-0 rounded-lg h-10 w-10">
-                    <Square className="h-4 w-4" />
-                  </Button>
-                ) : (
-                  <Button
-                    size="icon"
-                    onClick={handleSendMessage}
-                    disabled={!inputValue.trim() || !currentAssistantId}
-                    className="shrink-0 rounded-lg h-10 w-10"
-                  >
-                    <Send className="h-4 w-4" />
-                  </Button>
-                )}
+                <div className="flex items-center justify-between mt-1 pt-2 border-t border-border/30">
+                  <div></div>
+                  {isStreaming ? (
+                    <Button size="icon" variant="destructive" onClick={handleStop} className="shrink-0 rounded-full h-8 w-8">
+                      <Square className="h-3.5 w-3.5" />
+                    </Button>
+                  ) : (
+                    <Button
+                      size="icon"
+                      onClick={handleSendMessage}
+                      disabled={!inputValue.trim() || !currentAssistantId}
+                      className={cn(
+                        "shrink-0 rounded-full h-8 w-8 transition-colors",
+                        inputValue.trim() && currentAssistantId ? "bg-emerald-500 hover:bg-emerald-600 text-white" : ""
+                      )}
+                    >
+                      <Send className="h-3.5 w-3.5" />
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
           )}
