@@ -1528,15 +1528,15 @@ code[data-streamdown='inline-code'] {
 }
 
 .juno-chat-composer {
-  padding: 5px 18px 12px;
+  padding: 7px 18px 14px;
   background:
-    linear-gradient(180deg, rgba(247, 247, 249, 0), rgba(247, 247, 249, 0.9) 28%, rgba(247, 247, 249, 0.98)),
+    linear-gradient(180deg, rgba(247, 247, 249, 0), rgba(247, 247, 249, 0.86) 34%, rgba(247, 247, 249, 0.98)),
     #f7f7f9;
 }
 
 .dark .juno-chat-composer {
   background:
-    linear-gradient(180deg, rgba(31, 32, 35, 0), rgba(31, 32, 35, 0.92) 28%, rgba(31, 32, 35, 0.98)),
+    linear-gradient(180deg, rgba(31, 32, 35, 0), rgba(31, 32, 35, 0.9) 34%, rgba(31, 32, 35, 0.98)),
     #1f2023;
 }
 
@@ -1544,90 +1544,134 @@ code[data-streamdown='inline-code'] {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.92);
-  border: 0.5px solid rgba(0, 0, 0, 0.12);
-  border-radius: 16px;
-  -webkit-backdrop-filter: blur(16px) saturate(1.08);
-  backdrop-filter: blur(16px) saturate(1.08);
+  width: min(860px, 100%);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(246, 247, 250, 0.72)),
+    rgba(248, 249, 251, 0.7);
+  border: 0.5px solid rgba(0, 0, 0, 0.14);
+  border-radius: 18px;
+  -webkit-backdrop-filter: blur(28px) saturate(1.35);
+  backdrop-filter: blur(28px) saturate(1.35);
   box-shadow:
-    0 10px 26px rgba(0, 0, 0, 0.065),
-    0 1px 2px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.82);
+    0 18px 42px rgba(0, 0, 0, 0.11),
+    0 2px 7px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.035);
   transition:
     border-color 0.16s ease,
     box-shadow 0.16s ease,
-    background 0.16s ease;
+    background 0.16s ease,
+    transform 0.16s ease;
 }
 
-.juno-composer::before {
+.juno-composer::before,
+.juno-composer::after {
   content: "";
   position: absolute;
   inset: 0;
-  z-index: -1;
   pointer-events: none;
+}
+
+.juno-composer::before {
+  z-index: -1;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.54), rgba(255, 255, 255, 0) 42%),
-    radial-gradient(circle at 12% 0%, rgba(0, 122, 255, 0.04), transparent 28%);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0) 40%),
+    radial-gradient(ellipse at 16% 0%, rgba(0, 122, 255, 0.055), transparent 34%);
+}
+
+.juno-composer::after {
+  z-index: 2;
+  border-radius: inherit;
+  box-shadow:
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.48),
+    inset 0 1px 0 rgba(255, 255, 255, 0.58);
 }
 
 .juno-composer:focus-within {
-  border-color: rgba(0, 122, 255, 0.28);
+  border-color: rgba(0, 122, 255, 0.32);
   box-shadow:
-    0 12px 30px rgba(0, 0, 0, 0.075),
-    0 0 0 2px rgba(0, 122, 255, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.86);
+    0 20px 46px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.07),
+    0 0 0 3px rgba(0, 122, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.03);
 }
 
 .dark .juno-composer {
-  background: rgba(37, 38, 41, 0.88);
-  border-color: rgba(255, 255, 255, 0.12);
+  background:
+    linear-gradient(180deg, rgba(58, 59, 64, 0.82), rgba(32, 33, 37, 0.74)),
+    rgba(36, 37, 41, 0.78);
+  border-color: rgba(255, 255, 255, 0.13);
   box-shadow:
-    0 12px 32px rgba(0, 0, 0, 0.34),
-    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+    0 20px 48px rgba(0, 0, 0, 0.42),
+    0 2px 8px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.095),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.32);
 }
 
 .dark .juno-composer::before {
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0) 42%),
-    radial-gradient(circle at 12% 0%, rgba(94, 173, 255, 0.07), transparent 28%);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0) 42%),
+    radial-gradient(ellipse at 16% 0%, rgba(10, 132, 255, 0.14), transparent 34%);
+}
+
+.dark .juno-composer::after {
+  box-shadow:
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .dark .juno-composer:focus-within {
-  border-color: rgba(94, 173, 255, 0.42);
+  border-color: rgba(10, 132, 255, 0.48);
   box-shadow:
-    0 12px 34px rgba(0, 0, 0, 0.4),
-    0 0 0 2px rgba(10, 132, 255, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    0 22px 52px rgba(0, 0, 0, 0.46),
+    0 2px 8px rgba(0, 0, 0, 0.26),
+    0 0 0 3px rgba(10, 132, 255, 0.17),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.34);
+}
+
+.juno-composer-input-surface {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.38);
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.065);
+}
+
+.dark .juno-composer-input-surface {
+  background: rgba(255, 255, 255, 0.035);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.07);
 }
 
 .juno-composer-textarea {
-  min-height: 48px;
+  display: block;
+  min-height: 56px;
   max-height: 140px;
-  padding: 11px 14px 6px;
+  padding: 14px 16px 12px;
   color: var(--foreground);
-  font-size: 13.5px;
-  line-height: 1.5;
-  caret-color: var(--primary);
+  font-size: 14px;
+  line-height: 1.54;
+  letter-spacing: 0;
+  caret-color: rgb(0, 122, 255);
 }
 
 .juno-composer-textarea::placeholder {
-  color: color-mix(in oklab, var(--foreground) 34%, transparent);
+  color: color-mix(in oklab, var(--foreground) 31%, transparent);
 }
 
 .juno-composer-toolbar {
-  min-height: 34px;
-  padding: 4px 7px 6px;
+  position: relative;
+  z-index: 3;
+  min-height: 38px;
+  padding: 5px 7px 6px;
   gap: 8px;
-  border-top: 0;
   background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.028), rgba(0, 0, 0, 0.012));
-  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.055);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.36), rgba(255, 255, 255, 0.18));
 }
 
 .dark .juno-composer-toolbar {
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.018));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.075);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.025));
 }
 
 .juno-composer-left-tools,
@@ -1642,17 +1686,21 @@ code[data-streamdown='inline-code'] {
   justify-content: center;
   width: 28px;
   height: 28px;
-  border-radius: 8px;
-  color: color-mix(in oklab, var(--foreground) 52%, transparent);
+  border: 0.5px solid transparent;
+  border-radius: 7px;
+  color: color-mix(in oklab, var(--foreground) 58%, transparent);
   transition:
     background 0.16s ease,
+    border-color 0.16s ease,
     color 0.16s ease,
     transform 0.16s ease;
 }
 
 .juno-composer-tool-button:hover {
-  background: rgba(0, 0, 0, 0.055);
+  border-color: rgba(0, 0, 0, 0.075);
+  background: rgba(255, 255, 255, 0.58);
   color: color-mix(in oklab, var(--foreground) 82%, transparent);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.055);
 }
 
 .juno-composer-tool-button:active {
@@ -1668,18 +1716,31 @@ code[data-streamdown='inline-code'] {
   align-items: center;
   justify-content: center;
   height: 28px;
-  padding: 0 8px;
+  max-width: 156px;
+  padding: 0 9px;
   gap: 6px;
-  border-radius: 8px;
+  border: 0.5px solid rgba(0, 0, 0, 0.085);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.46);
   color: color-mix(in oklab, var(--foreground) 64%, transparent);
-  font-size: 12.5px;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.045),
+    inset 0 1px 0 rgba(255, 255, 255, 0.58);
+  font-size: 12px;
   font-weight: 560;
   letter-spacing: 0;
   white-space: nowrap;
   transition:
     background 0.16s ease,
+    border-color 0.16s ease,
     color 0.16s ease,
     transform 0.16s ease;
+}
+
+.juno-composer-permission-trigger span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .juno-composer-permission-trigger[data-mode="ask"] {
@@ -1699,7 +1760,8 @@ code[data-streamdown='inline-code'] {
 }
 
 .juno-composer-permission-trigger:hover {
-  background: rgba(0, 0, 0, 0.055);
+  border-color: rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.68);
   color: color-mix(in oklab, currentColor 88%, var(--foreground));
 }
 
@@ -1721,16 +1783,26 @@ code[data-streamdown='inline-code'] {
 
 .dark .juno-composer-permission-trigger:hover,
 .dark .juno-composer-tool-button:hover {
-  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.13);
+  background: rgba(255, 255, 255, 0.095);
+  box-shadow: none;
+}
+
+.dark .juno-composer-permission-trigger {
+  border-color: rgba(255, 255, 255, 0.105);
+  background: rgba(255, 255, 255, 0.055);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.075);
 }
 
 .juno-composer-send {
   width: 30px;
   height: 30px;
-  border-radius: 10px;
+  border-radius: 9px;
   color: color-mix(in oklab, var(--foreground) 42%, transparent);
-  background: rgba(0, 0, 0, 0.045);
-  box-shadow: none;
+  background: rgba(0, 0, 0, 0.04);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.38);
 }
 
 .juno-composer-send:hover {
@@ -1753,35 +1825,60 @@ code[data-streamdown='inline-code'] {
 
 .juno-composer-attachment {
   max-width: 180px;
-  padding: 5px 8px;
-  border: 0.5px solid rgba(0, 0, 0, 0.08);
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.035);
+  min-height: 25px;
+  padding: 4px 6px 4px 8px;
+  border: 0.5px solid rgba(0, 0, 0, 0.095);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.56);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.48);
+}
+
+.juno-attachment-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  border-radius: 999px;
+  color: color-mix(in oklab, var(--foreground) 46%, transparent);
+  transition:
+    background 0.16s ease,
+    color 0.16s ease;
+}
+
+.juno-attachment-remove:hover {
+  background: rgba(0, 0, 0, 0.075);
+  color: color-mix(in oklab, var(--foreground) 82%, transparent);
 }
 
 .dark .juno-composer-attachment {
-  border-color: rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.055);
+  border-color: rgba(255, 255, 255, 0.11);
+  background: rgba(255, 255, 255, 0.075);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.075);
+}
+
+.dark .juno-attachment-remove:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .juno-send-button {
-  background: #111214 !important;
+  background: linear-gradient(180deg, #2f9bff, #007aff) !important;
   color: #ffffff !important;
   box-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    0 3px 9px rgba(0, 122, 255, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.34) !important;
 }
 
 .juno-send-button:hover {
-  background: #000000 !important;
+  background: linear-gradient(180deg, #47a7ff, #0a84ff) !important;
 }
 
 .dark .juno-send-button {
-  background: #f4f5f7 !important;
-  color: #111214 !important;
+  background: linear-gradient(180deg, #49a8ff, #0a84ff) !important;
+  color: #ffffff !important;
   box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.34),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    0 3px 11px rgba(10, 132, 255, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;
 }
 
 .juno-agent-approval-wrap {

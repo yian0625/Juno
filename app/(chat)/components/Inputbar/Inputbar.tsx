@@ -40,30 +40,35 @@ interface Props {
 const AGENT_APPROVAL_OPTIONS: Array<{
   value: AgentApprovalMode
   label: string
+  shortLabel: string
   description: string
   icon: LucideIcon
 }> = [
   {
     value: 'ask',
     label: '需要询问批准',
+    shortLabel: '询问批准',
     description: '每次编辑外部文件和使用网络时都需要询问',
     icon: Hand,
   },
   {
     value: 'auto',
     label: '自动帮我批准',
+    shortLabel: '自动批准',
     description: '仅在检测到可能不安全的操作时才询问',
     icon: ShieldAlert,
   },
   {
     value: 'full',
     label: '完全访问权限',
+    shortLabel: '完全访问',
     description: '不受限制地访问互联网和你电脑上的任何文件',
     icon: ShieldCheck,
   },
   {
     value: 'readonly',
     label: '只读模式',
+    shortLabel: '只读',
     description: '只能读取和检索，不修改文件',
     icon: Shield,
   },
@@ -156,25 +161,6 @@ export default function Inputbar({ onSend, onStop, inputRef }: Props) {
   return (
     <div className="juno-chat-composer shrink-0">
       <div className="juno-composer max-w-[860px] mx-auto">
-        {/* Uploaded files preview */}
-        {uploadedFiles.length > 0 && (
-          <div className="juno-composer-attachments flex flex-wrap gap-2">
-            {uploadedFiles.map((file, index) => (
-              <div key={index} className="juno-composer-attachment flex items-center gap-1.5 text-xs group">
-                {file.file_type === 'image' ? (
-                  <ImageIcon className="h-3.5 w-3.5 text-primary shrink-0" />
-                ) : (
-                  <FileText className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-                )}
-                <span className="truncate max-w-[120px]">{file.filename}</span>
-                <button onClick={() => removeFile(index)} className="p-0.5 rounded hover:bg-accent text-muted-foreground hover:text-foreground transition-colors">
-                  <X className="h-3 w-3" />
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-
         <input
           ref={fileInputRef}
           type="file"
@@ -184,28 +170,49 @@ export default function Inputbar({ onSend, onStop, inputRef }: Props) {
           onChange={handleFileUpload}
         />
 
-        <textarea
-          ref={inputRef as React.RefObject<HTMLTextAreaElement>}
-          value={localInput}
-          onChange={(e) => {
-            const val = e.target.value
-            setLocalInput(val)
-            inputValueRef.current = val
-            // Sync to store without causing re-renders in other components
-            useChatStore.setState({ inputValue: val })
-          }}
-          onKeyDown={handleKeyDown}
-          placeholder="交给 Juno Agent 一个任务，Enter 发送，Shift+Enter 换行"
-          rows={2}
-          className="juno-composer-textarea w-full bg-transparent resize-none focus:outline-none"
-          style={{ height: "auto", overflow: "hidden" }}
-          onInput={(e) => {
-            const target = e.target as HTMLTextAreaElement
-            target.style.height = "auto"
-            target.style.height = Math.min(target.scrollHeight, 132) + "px"
-          }}
-          disabled={isStreaming}
-        />
+        <div className="juno-composer-input-surface">
+          {/* Uploaded files preview */}
+          {uploadedFiles.length > 0 && (
+            <div className="juno-composer-attachments flex flex-wrap gap-2">
+              {uploadedFiles.map((file, index) => (
+                <div key={index} className="juno-composer-attachment flex items-center gap-1.5 text-xs group">
+                  {file.file_type === 'image' ? (
+                    <ImageIcon className="h-3.5 w-3.5 text-primary shrink-0" />
+                  ) : (
+                    <FileText className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+                  )}
+                  <span className="truncate max-w-[120px]">{file.filename}</span>
+                  <button onClick={() => removeFile(index)} className="juno-attachment-remove">
+                    <X className="h-3 w-3" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <textarea
+            ref={inputRef as React.RefObject<HTMLTextAreaElement>}
+            value={localInput}
+            onChange={(e) => {
+              const val = e.target.value
+              setLocalInput(val)
+              inputValueRef.current = val
+              // Sync to store without causing re-renders in other components
+              useChatStore.setState({ inputValue: val })
+            }}
+            onKeyDown={handleKeyDown}
+            placeholder="向 Juno 描述任务..."
+            rows={2}
+            className="juno-composer-textarea w-full bg-transparent resize-none focus:outline-none"
+            style={{ height: "auto", overflow: "hidden" }}
+            onInput={(e) => {
+              const target = e.target as HTMLTextAreaElement
+              target.style.height = "auto"
+              target.style.height = Math.min(target.scrollHeight, 132) + "px"
+            }}
+            disabled={isStreaming}
+          />
+        </div>
 
         <div className="juno-composer-toolbar flex items-center justify-between">
           <div className="juno-composer-left-tools flex items-center">
@@ -218,7 +225,7 @@ export default function Inputbar({ onSend, onStop, inputRef }: Props) {
                   aria-label={`Agent 权限：${selectedApprovalOption.label}`}
                 >
                   <SelectedApprovalIcon className="h-3.5 w-3.5" />
-                  <span>{selectedApprovalOption.label}</span>
+                  <span>{selectedApprovalOption.shortLabel}</span>
                   <ChevronDown className="h-3.5 w-3.5 opacity-60" />
                 </button>
               </DropdownMenuTrigger>
