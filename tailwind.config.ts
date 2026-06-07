@@ -7,11 +7,6 @@ export default {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  safelist: [
-    'text-gray-900',
-    'text-gray-800',
-    'text-gray-700',
-  ],
   theme: {
     extend: {
       fontFamily: {

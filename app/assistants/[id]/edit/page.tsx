@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -20,10 +19,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { ArrowLeft, Plus, X, Trash2, Globe, GlobeIcon } from "lucide-react"
-import { assistantAPI, mcpAPI, ragAPI, chatAPI } from "@/lib/api"
-import type { Assistant, McpServerConfig, UserRagSource, Model } from "@/lib/types"
+import { Trash2, Globe } from "lucide-react"
+import { assistantAPI, mcpAPI, ragAPI, providerAPI } from "@/lib/api"
+import type { Assistant, McpServerConfig, UserRagSource } from "@/lib/types"
 import { toast } from "@/hooks/use-toast"
+
+interface ChatModelOption {
+  id: number
+  name: string
+}
 
 export default function EditAssistantPage() {
   const router = useRouter()
@@ -40,12 +44,8 @@ export default function EditAssistantPage() {
   const [defaultModelId, setDefaultModelId] = useState<number>(0)
   const [selectedMcpIds, setSelectedMcpIds] = useState<number[]>([])
   const [selectedKnowledgeIds, setSelectedKnowledgeIds] = useState<number[]>([])
-  const [sampleQuestions, setSampleQuestions] = useState<string[]>([])
-  const [newQuestion, setNewQuestion] = useState("")
-  const [historyRounds, setHistoryRounds] = useState(10)
-  const [assistantStatus, setAssistantStatus] = useState(1)
 
-  const [models, setModels] = useState<Model[]>([])
+  const [chatModels, setChatModels] = useState<ChatModelOption[]>([])
   const [mcpServers, setMcpServers] = useState<McpServerConfig[]>([])
   const [knowledgeSources, setKnowledgeSources] = useState<UserRagSource[]>([])
 
@@ -58,12 +58,12 @@ export default function EditAssistantPage() {
     try {
       const [assistantRes, modelsRes, mcpRes, ragRes] = await Promise.allSettled([
         assistantAPI.get(assistantId),
-        chatAPI.getModels(),
+        providerAPI.fetchSystemModelsByType("chat"),
         mcpAPI.list(),
         ragAPI.listSources(),
       ])
 
-      if (modelsRes.status === "fulfilled") setModels(modelsRes.value.models || [])
+      if (modelsRes.status === "fulfilled") setChatModels((modelsRes.value.models || []).map((item) => ({ id: item.id, name: item.display_name })))
       if (mcpRes.status === "fulfilled") setMcpServers(mcpRes.value.list || [])
       if (ragRes.status === "fulfilled") setKnowledgeSources(ragRes.value.list || [])
 
@@ -76,9 +76,6 @@ export default function EditAssistantPage() {
         setDefaultModelId(a.default_model_id || 0)
         setSelectedMcpIds((a.mcp_servers || []).map((s) => s.id))
         setSelectedKnowledgeIds((a.knowledge_sources || []).map((s) => s.id))
-        setSampleQuestions(a.sample_questions || [])
-        setHistoryRounds(a.history_rounds || 10)
-        setAssistantStatus(a.status)
       }
     } catch (err) {
       console.error("Failed to load:", err)
@@ -87,13 +84,6 @@ export default function EditAssistantPage() {
     }
   }
 
-  const handleAddQuestion = () => {
-    const q = newQuestion.trim()
-    if (q && !sampleQuestions.includes(q)) {
-      setSampleQuestions([...sampleQuestions, q])
-      setNewQuestion("")
-    }
-  }
 
   const handleSubmit = async () => {
     if (!name.trim()) {
@@ -112,8 +102,6 @@ export default function EditAssistantPage() {
         default_model_id: defaultModelId || undefined,
         mcp_servers: selectedMcpIds.map((id) => ({ id })),
         knowledge_sources: selectedKnowledgeIds.map((id) => ({ id })),
-        sample_questions: sampleQuestions,
-        history_rounds: historyRounds,
       })
 
       toast({ title: "保存成功" })
@@ -135,17 +123,10 @@ export default function EditAssistantPage() {
     }
   }
 
-  const handlePublishToggle = async () => {
+  const handleSaveToLibrary = async () => {
     try {
-      if (assistantStatus === 2) {
-        await assistantAPI.unpublish(assistantId)
-        setAssistantStatus(1)
-        toast({ title: "已下架" })
-      } else {
-        await assistantAPI.publish(assistantId)
-        setAssistantStatus(2)
-        toast({ title: "已发布到市场" })
-      }
+      await assistantAPI.saveToLibrary(assistantId)
+      toast({ title: "已保存到我的助手库" })
     } catch (err: any) {
       toast({ title: "操作失败", description: err.message })
     }
@@ -154,173 +135,142 @@ export default function EditAssistantPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full" />
+        <div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full" />
       </div>
     )
   }
 
+  const SectionTitle = ({ children }: { children: React.ReactNode }) => (
+    <h2 className="text-sm font-medium mb-3">{children}</h2>
+  )
+
   return (
-    <div className="min-h-screen">
-      <header className="glass-header sticky top-0 z-50">
-        <div className="container flex h-14 items-center justify-between px-4 mx-auto max-w-3xl">
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" onClick={() => router.back()}>
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-            <h1 className="text-lg font-semibold">编辑助手</h1>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={handlePublishToggle}>
-              <Globe className="h-4 w-4 mr-1" />
-              {assistantStatus === 2 ? "下架" : "发布"}
-            </Button>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="destructive" size="sm">
-                  <Trash2 className="h-4 w-4 mr-1" />
-                  删除
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>确认删除？</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    删除后助手及相关数据将无法恢复。
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>取消</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleDelete}>确认删除</AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </div>
-        </div>
-      </header>
-
-      <main className="container px-4 py-6 mx-auto max-w-3xl space-y-6">
-        {/* 基本信息 */}
-        <Card>
-          <CardHeader><CardTitle className="text-base">基本信息</CardTitle></CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label>助手名称 *</Label>
-              <Input value={name} onChange={(e) => setName(e.target.value)} />
-            </div>
-            <div className="space-y-2">
-              <Label>头像 URL</Label>
-              <Input value={avatarUrl} onChange={(e) => setAvatarUrl(e.target.value)} placeholder="https://..." />
-            </div>
-            <div className="space-y-2">
-              <Label>描述</Label>
-              <Textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* 提示词配置 */}
-        <Card>
-          <CardHeader><CardTitle className="text-base">提示词配置</CardTitle></CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label>System Prompt</Label>
-              <Textarea
-                value={systemPrompt}
-                onChange={(e) => setSystemPrompt(e.target.value)}
-                rows={6}
-                className="font-mono text-sm"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>默认模型</Label>
-                <Select value={defaultModelId ? String(defaultModelId) : ""} onValueChange={(v) => setDefaultModelId(Number(v))}>
-                  <SelectTrigger><SelectValue placeholder="选择模型" /></SelectTrigger>
-                  <SelectContent>
-                    {models.map((m) => (
-                      <SelectItem key={m.id} value={String(m.id)}>{m.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label>历史对话轮数</Label>
-                <Input type="number" min={0} max={50} value={historyRounds} onChange={(e) => setHistoryRounds(Number(e.target.value))} />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* 扩展能力 */}
-        <Card>
-          <CardHeader><CardTitle className="text-base">扩展能力</CardTitle></CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label>MCP Server</Label>
-              <div className="flex flex-wrap gap-2">
-                {mcpServers.map((server) => (
-                  <Badge
-                    key={server.id}
-                    variant={selectedMcpIds.includes(server.id) ? "default" : "outline"}
-                    className="cursor-pointer"
-                    onClick={() => setSelectedMcpIds((prev) => prev.includes(server.id) ? prev.filter((id) => id !== server.id) : [...prev, server.id])}
-                  >
-                    {server.name}
-                  </Badge>
-                ))}
-                {mcpServers.length === 0 && <p className="text-sm text-muted-foreground">暂无 MCP Server</p>}
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label>知识库</Label>
-              <div className="flex flex-wrap gap-2">
-                {knowledgeSources.map((source) => (
-                  <Badge
-                    key={source.id}
-                    variant={selectedKnowledgeIds.includes(source.id) ? "default" : "outline"}
-                    className="cursor-pointer"
-                    onClick={() => setSelectedKnowledgeIds((prev) => prev.includes(source.id) ? prev.filter((id) => id !== source.id) : [...prev, source.id])}
-                  >
-                    {source.name}
-                  </Badge>
-                ))}
-                {knowledgeSources.length === 0 && <p className="text-sm text-muted-foreground">暂无知识库</p>}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* 示例问题 */}
-        <Card>
-          <CardHeader><CardTitle className="text-base">示例问题</CardTitle></CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex gap-2">
-              <Input
-                placeholder="添加示例问题"
-                value={newQuestion}
-                onChange={(e) => setNewQuestion(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleAddQuestion()}
-              />
-              <Button variant="outline" size="icon" onClick={handleAddQuestion}><Plus className="h-4 w-4" /></Button>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {sampleQuestions.map((q, i) => (
-                <Badge key={i} variant="secondary" className="gap-1 pr-1">
-                  {q}
-                  <button onClick={() => setSampleQuestions(sampleQuestions.filter((_, j) => j !== i))} className="ml-1 hover:text-destructive"><X className="h-3 w-3" /></button>
-                </Badge>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="flex gap-3 justify-end pb-6">
-          <Button variant="outline" onClick={() => router.back()}>取消</Button>
-          <Button onClick={handleSubmit} disabled={isSubmitting}>
-            {isSubmitting ? "保存中..." : "保存"}
+    <div className="h-full overflow-y-auto p-6">
+      <div className="max-w-2xl mx-auto space-y-8">
+        <div className="flex items-center justify-end gap-2">
+          <Button variant="outline" size="sm" className="h-8 text-xs" onClick={handleSaveToLibrary}>
+            <Globe className="h-3.5 w-3.5 mr-1" />
+            保存到助手库
           </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="outline" size="sm" className="h-8 text-xs text-destructive hover:text-destructive">
+                <Trash2 className="h-3.5 w-3.5 mr-1" />
+                删除
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>确认删除？</AlertDialogTitle>
+                <AlertDialogDescription>
+                  删除后助手及相关数据将无法恢复。
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>取消</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDelete}>确认删除</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
-      </main>
+          {/* 基本信息 */}
+          <div>
+            <SectionTitle>基本信息</SectionTitle>
+            <div className="space-y-3 rounded-lg border border-border/50 p-4">
+              <div className="space-y-1.5">
+                <Label className="text-xs">助手名称 *</Label>
+                <Input value={name} onChange={(e) => setName(e.target.value)} className="h-9 text-sm" />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs">头像 URL</Label>
+                <Input value={avatarUrl} onChange={(e) => setAvatarUrl(e.target.value)} placeholder="https://..." className="h-9 text-sm" />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs">描述</Label>
+                <Textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} className="text-sm" />
+              </div>
+            </div>
+          </div>
+
+          {/* 提示词配置 */}
+          <div>
+            <SectionTitle>提示词配置</SectionTitle>
+            <div className="space-y-3 rounded-lg border border-border/50 p-4">
+              <div className="space-y-1.5">
+                <Label className="text-xs">System Prompt</Label>
+                <Textarea
+                  value={systemPrompt}
+                  onChange={(e) => setSystemPrompt(e.target.value)}
+                  rows={6}
+                  className="font-mono text-sm"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1.5">
+                  <Label className="text-xs">默认聊天模型</Label>
+                  <Select value={defaultModelId ? String(defaultModelId) : ""} onValueChange={(v) => {
+                    const modelId = Number(v)
+                    setDefaultModelId(modelId)
+                  }}>
+                    <SelectTrigger className="h-9 text-sm"><SelectValue placeholder="选择模型" /></SelectTrigger>
+                    <SelectContent>
+                      {chatModels.map((chatModel) => (
+                        <SelectItem key={chatModel.id} value={String(chatModel.id)}>{chatModel.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+            </div>
+          </div>
+          </div>
+          {/* 扩展能力 */}
+          <div>
+            <SectionTitle>扩展能力</SectionTitle>
+            <div className="space-y-4 rounded-lg border border-border/50 p-4">
+              <div className="space-y-2">
+                <Label className="text-xs">MCP Server</Label>
+                <div className="flex flex-wrap gap-1.5">
+                  {mcpServers.map((server) => (
+                    <Badge
+                      key={server.id}
+                      variant={selectedMcpIds.includes(server.id) ? "default" : "outline"}
+                      className="cursor-pointer text-xs"
+                      onClick={() => setSelectedMcpIds((prev) => prev.includes(server.id) ? prev.filter((id) => id !== server.id) : [...prev, server.id])}
+                    >
+                      {server.name}
+                    </Badge>
+                  ))}
+                  {mcpServers.length === 0 && <p className="text-xs text-muted-foreground">暂无 MCP Server</p>}
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-xs">知识库</Label>
+                <div className="flex flex-wrap gap-1.5">
+                  {knowledgeSources.map((source) => (
+                    <Badge
+                      key={source.id}
+                      variant={selectedKnowledgeIds.includes(source.id) ? "default" : "outline"}
+                      className="cursor-pointer text-xs"
+                      onClick={() => setSelectedKnowledgeIds((prev) => prev.includes(source.id) ? prev.filter((id) => id !== source.id) : [...prev, source.id])}
+                    >
+                      {source.name}
+                    </Badge>
+                  ))}
+                  {knowledgeSources.length === 0 && <p className="text-xs text-muted-foreground">暂无知识库</p>}
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div className="flex gap-3 justify-end pb-6">
+            <Button variant="outline" size="sm" onClick={() => router.back()}>取消</Button>
+            <Button size="sm" onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? "保存中..." : "保存"}
+            </Button>
+          </div>
+      </div>
     </div>
   )
 }

@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
@@ -19,6 +18,7 @@ import { ArrowLeft, Plus, Trash2, RefreshCw, Server, Edit2 } from "lucide-react"
 import { mcpAPI } from "@/lib/api"
 import type { McpServerConfig } from "@/lib/types"
 import { toast } from "@/hooks/use-toast"
+import { cn } from "@/lib/utils"
 
 export default function McpPage() {
   const router = useRouter()
@@ -30,7 +30,6 @@ export default function McpPage() {
   const [refreshingId, setRefreshingId] = useState<number | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // 表单
   const [formName, setFormName] = useState("")
   const [formUrl, setFormUrl] = useState("")
   const [formTransport, setFormTransport] = useState("sse")
@@ -125,87 +124,76 @@ export default function McpPage() {
   }
 
   return (
-    <div className="min-h-screen">
-      <header className="glass-header sticky top-0 z-50">
-        <div className="container flex h-14 items-center justify-between px-4 mx-auto max-w-4xl">
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" onClick={() => router.push("/")}>
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-            <h1 className="text-lg font-semibold">MCP Server 管理</h1>
-          </div>
-          <Button size="sm" onClick={openCreate}>
-            <Plus className="h-4 w-4 mr-1" />
-            添加
-          </Button>
-        </div>
-      </header>
-
-      <main className="container px-4 py-6 mx-auto max-w-4xl">
-        {isLoading ? (
-          <div className="space-y-4">
-            {[1, 2].map((i) => (
-              <Card key={i} className="animate-pulse">
-                <CardHeader><div className="h-5 bg-muted rounded w-1/3" /></CardHeader>
-              </Card>
-            ))}
-          </div>
-        ) : servers.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
-            <Server className="h-12 w-12 mb-4 opacity-50" />
-            <p className="text-lg mb-2">暂无 MCP Server</p>
-            <p className="text-sm mb-4">添加 MCP Server 为助手赋予工具能力</p>
-            <Button onClick={openCreate}>
-              <Plus className="h-4 w-4 mr-1" />
-              添加 MCP Server
+    <div className="h-full overflow-y-auto p-6">
+        <div className="max-w-3xl mx-auto">
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-xs text-muted-foreground">{servers.length} 个 Server</p>
+            <Button size="sm" className="h-8 text-xs" onClick={openCreate}>
+              <Plus className="h-3.5 w-3.5 mr-1" />添加
             </Button>
           </div>
-        ) : (
-          <div className="space-y-4">
-            {servers.map((server) => (
-              <Card key={server.id}>
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <div>
-                    <CardTitle className="text-base">{server.name}</CardTitle>
-                    <p className="text-xs text-muted-foreground mt-1 font-mono">{server.url}</p>
+          {isLoading ? (
+            <div className="space-y-2">
+              {[1, 2].map((i) => (
+                <div key={i} className="animate-pulse rounded-lg border border-border/50 p-4">
+                  <div className="h-4 bg-muted rounded w-1/3 mb-2" />
+                  <div className="h-3 bg-muted rounded w-1/2" />
+                </div>
+              ))}
+            </div>
+          ) : servers.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
+              <Server className="h-12 w-12 mb-3 opacity-20" />
+              <p className="text-sm font-medium mb-1">暂无 MCP Server</p>
+              <p className="text-xs mb-4">添加 MCP Server 为助手赋予工具能力</p>
+              <Button size="sm" onClick={openCreate}>
+                <Plus className="h-3.5 w-3.5 mr-1" />
+                添加 MCP Server
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {servers.map((server) => (
+                <div key={server.id} className="rounded-lg border border-border/50 p-4 hover:bg-accent/30 transition-colors">
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium">{server.name}</span>
+                      <Badge variant="outline" className="text-[10px] h-5">{server.transport_type || "sse"}</Badge>
+                    </div>
+                    <div className="flex items-center gap-0.5">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7"
+                        onClick={() => handleRefresh(server.id)}
+                        disabled={refreshingId === server.id}
+                      >
+                        <RefreshCw className={cn("h-3.5 w-3.5", refreshingId === server.id && "animate-spin")} />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEdit(server)}>
+                        <Edit2 className="h-3.5 w-3.5" />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setDeletingId(server.id)}>
+                        <Trash2 className="h-3.5 w-3.5 text-muted-foreground hover:text-destructive" />
+                      </Button>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <Badge variant="outline" className="text-xs">{server.transport_type || "sse"}</Badge>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => handleRefresh(server.id)}
-                      disabled={refreshingId === server.id}
-                    >
-                      <RefreshCw className={`h-4 w-4 ${refreshingId === server.id ? "animate-spin" : ""}`} />
-                    </Button>
-                    <Button variant="ghost" size="icon" onClick={() => openEdit(server)}>
-                      <Edit2 className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon" onClick={() => setDeletingId(server.id)}>
-                      <Trash2 className="h-4 w-4 text-destructive" />
-                    </Button>
-                  </div>
-                </CardHeader>
-                {server.tools && server.tools.length > 0 && (
-                  <CardContent>
-                    <p className="text-xs text-muted-foreground mb-2">可用工具 ({server.tools.length})</p>
-                    <div className="flex flex-wrap gap-1.5">
+                  <p className="text-xs text-muted-foreground font-mono mb-2">{server.url}</p>
+                  {server.tools && server.tools.length > 0 && (
+                    <div className="flex flex-wrap gap-1">
                       {server.tools.map((tool, i) => (
-                        <Badge key={i} variant="secondary" className="text-xs font-normal">
+                        <Badge key={i} variant="secondary" className="text-[10px] font-normal h-5">
                           {tool.name}
                         </Badge>
                       ))}
                     </div>
-                  </CardContent>
-                )}
-              </Card>
-            ))}
-          </div>
-        )}
-      </main>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
-      {/* 创建/编辑弹窗 */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
           <DialogHeader>
@@ -240,7 +228,6 @@ export default function McpPage() {
         </DialogContent>
       </Dialog>
 
-      {/* 删除确认 */}
       <AlertDialog open={!!deletingId} onOpenChange={(open) => !open && setDeletingId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>

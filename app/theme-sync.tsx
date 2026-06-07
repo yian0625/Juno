@@ -25,8 +25,6 @@ export function ThemeSync() {
   useEffect(() => {
     if (!mounted) return
 
-    console.log('🎨 [ThemeSync] theme:', theme, 'resolvedTheme:', resolvedTheme)
-
     // 关键修复：所有模式都使用 'only' 关键字，完全忽略系统偏好
     // 这样可以确保手动模式和系统模式的效果完全一致
     if (theme === 'system') {
@@ -44,7 +42,6 @@ export function ThemeSync() {
       document.documentElement.style.colorScheme = 'only light'
     }
 
-    console.log('🎨 [ThemeSync] style.colorScheme:', document.documentElement.style.colorScheme)
   }, [mounted, theme, resolvedTheme])
 
   return null

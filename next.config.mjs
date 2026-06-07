@@ -17,7 +17,8 @@ const nextConfig = {
   async rewrites() {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:9001'
     return [
-      { source: '/:path((?:login_api|user_api|assistant_api|topic_api|chat_api|mcp_api|rag_api).*)', destination: `${apiUrl}/:path` },
+      { source: '/:path((?:login_api|user_api|assistant_api|assistant_group_api|topic_api|chat_api|agent_api|mcp_api|rag_api|config_api|settings_api|provider_api|juno_hub_api_key|memory_api|miniapp_api|search_provider_api|task_api|admin).*)', destination: `${apiUrl}/:path` },
+      { source: '/uploads/:path*', destination: `${apiUrl}/uploads/:path*` },
     ]
   },
   async headers() {
@@ -44,4 +45,3 @@ const nextConfig = {
 }
 
 export default nextConfig
-

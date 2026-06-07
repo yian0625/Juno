@@ -21,7 +21,7 @@ export function Toaster() {
             <div className="grid gap-1">
               {title && <ToastTitle>{title}</ToastTitle>}
               {description && (
-                <ToastDescription>{description}</ToastDescription>
+                <ToastDescription className="line-clamp-2 break-all">{typeof description === 'string' && description.length > 100 ? description.slice(0, 100) + '...' : description}</ToastDescription>
               )}
             </div>
             {action}

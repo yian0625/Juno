@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "configs": [
+    {
+      "name": "juno-front",
+      "framework": "nextjs",
+      "command": "npm run dev",
+      "portPlaceholder": "{PORT}",
+      "cwd": "."
+    }
+  ],
+  "activeConfig": 0,
+  "generatedAt": "2026-04-01T08:34:31.396Z"
+}
