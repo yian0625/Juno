@@ -11,18 +11,18 @@ import { authAPI, setToken, setUser, getToken, getUser } from "@/lib/api"
 import { toast } from "@/hooks/use-toast"
 
 const authFieldClassName =
-  "h-10 rounded-[10px] border-black/[0.10] bg-[#f3f4f7] px-3 text-[13px] shadow-[inset_0_1px_0_rgba(255,255,255,0.86)] placeholder:text-[#8b8f97] focus-visible:border-[#007aff]/60 focus-visible:bg-white focus-visible:ring-[3px] focus-visible:ring-[#007aff]/15 dark:border-white/[0.10] dark:bg-[#1b1c20] dark:shadow-none dark:placeholder:text-white/35 dark:focus-visible:bg-[#1d1e22]"
+  "h-10 rounded-[13px] border-black/[0.10] bg-[#f3f4f7] px-3 text-[13px] shadow-[inset_0_1px_0_rgba(255,255,255,0.86)] placeholder:text-[#8b8f97] focus-visible:border-[#007aff]/60 focus-visible:bg-white focus-visible:ring-[3px] focus-visible:ring-[#007aff]/15 dark:border-white/[0.10] dark:bg-[#1b1c20] dark:shadow-none dark:placeholder:text-white/35 dark:focus-visible:bg-[#1d1e22]"
 
 const authPrimaryButtonClassName =
-  "h-9 rounded-[9px] border border-[#007aff]/25 bg-[#0a84ff] text-[13px] font-medium text-white shadow-[0_1px_2px_rgba(0,122,255,0.20),inset_0_1px_0_rgba(255,255,255,0.24)] hover:bg-[#0077ed] active:translate-y-px active:shadow-[inset_0_1px_2px_rgba(0,0,0,0.18)] disabled:opacity-65 dark:border-[#4aa3ff]/20 dark:bg-[#0a84ff] dark:text-white dark:hover:bg-[#1991ff]"
+  "h-9 rounded-[12px] border border-[#007aff]/25 bg-[#0a84ff] text-[13px] font-medium text-white shadow-[0_1px_2px_rgba(0,122,255,0.20),inset_0_1px_0_rgba(255,255,255,0.24)] hover:bg-[#0077ed] active:translate-y-px active:shadow-[inset_0_1px_2px_rgba(0,0,0,0.18)] disabled:opacity-65 dark:border-[#4aa3ff]/20 dark:bg-[#0a84ff] dark:text-white dark:hover:bg-[#1991ff]"
 
 const authGhostButtonClassName =
-  "h-7 rounded-[8px] px-2 text-[12px] font-medium text-muted-foreground hover:bg-black/[0.04] hover:text-foreground dark:hover:bg-white/[0.055]"
+  "h-7 rounded-[10px] px-2 text-[12px] font-medium text-muted-foreground hover:bg-black/[0.04] hover:text-foreground dark:hover:bg-white/[0.055]"
 
 const authLabelClassName = "text-[12px] font-medium text-foreground/78"
 
 const authTabClassName =
-  "h-full rounded-[7px] border border-transparent text-[13px] font-medium text-muted-foreground transition-colors focus-visible:border-transparent focus-visible:outline-none focus-visible:ring-0 data-[state=active]:border-black/[0.055] data-[state=active]:bg-[#fbfbfd] data-[state=active]:text-foreground data-[state=active]:shadow-[0_1px_2px_rgba(0,0,0,0.10),inset_0_1px_0_rgba(255,255,255,0.74)] dark:data-[state=active]:border-white/[0.08] dark:data-[state=active]:bg-[#34363b] dark:data-[state=active]:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
+  "h-full rounded-[9px] border border-transparent text-[13px] font-medium text-muted-foreground transition-colors focus-visible:border-transparent focus-visible:outline-none focus-visible:ring-0 data-[state=active]:border-black/[0.055] data-[state=active]:bg-[#fbfbfd] data-[state=active]:text-foreground data-[state=active]:shadow-[0_1px_2px_rgba(0,0,0,0.10),inset_0_1px_0_rgba(255,255,255,0.74)] dark:data-[state=active]:border-white/[0.08] dark:data-[state=active]:bg-[#34363b] dark:data-[state=active]:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
 
 type AuthFieldProps = React.ComponentProps<typeof Input> & {
   id: string
@@ -211,7 +211,7 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-[100dvh] items-center justify-center overflow-y-auto bg-[#eceef2] px-5 py-8 dark:bg-[#17181b]">
       <main className="w-full max-w-[820px]">
-        <section className="grid overflow-hidden rounded-[22px] border border-black/[0.08] bg-[#f7f8fa] shadow-[0_28px_88px_rgba(35,42,54,0.18)] dark:border-white/[0.08] dark:bg-[#202124] dark:shadow-[0_28px_74px_rgba(0,0,0,0.48)] md:grid-cols-[0.96fr_1.04fr]">
+        <section className="grid overflow-hidden rounded-[26px] border border-black/[0.08] bg-[#f7f8fa] shadow-[0_28px_88px_rgba(35,42,54,0.18)] dark:border-white/[0.08] dark:bg-[#202124] dark:shadow-[0_28px_74px_rgba(0,0,0,0.48)] md:grid-cols-[0.96fr_1.04fr]">
           <aside className="hidden min-h-[468px] flex-col border-r border-black/[0.07] bg-[#eef0f4] p-7 dark:border-white/[0.07] dark:bg-[#202124] md:flex">
             <div className="flex items-center gap-3">
               <div className="flex size-16 items-center justify-center rounded-[17px] border border-black/[0.06] bg-white shadow-[0_12px_30px_rgba(36,44,58,0.16)] dark:border-white/[0.10] dark:bg-[#2b2c31] dark:shadow-none">
@@ -234,10 +234,6 @@ export default function LoginPage() {
 
             <WorkspacePreview />
 
-            <div className="mt-auto flex items-center gap-2 border-t border-black/[0.06] pt-4 text-[12px] text-muted-foreground dark:border-white/[0.07]">
-              <span className="size-1.5 rounded-full bg-[#30d158]" />
-              <span>准备就绪</span>
-            </div>
           </aside>
 
           <div className="bg-[#fbfbfd] p-5 sm:p-7 md:p-8 dark:bg-[#242529]">
@@ -275,7 +271,7 @@ export default function LoginPage() {
                 onValueChange={(value) => setAuthMode(value as "login" | "register")}
                 className="w-full gap-0"
               >
-                <TabsList className="mb-5 grid h-8 w-[174px] grid-cols-2 rounded-[9px] border border-black/[0.08] bg-[#e9eaee] p-0.5 dark:border-white/[0.08] dark:bg-[#1d1e22]">
+                <TabsList className="mb-5 grid h-8 w-[174px] grid-cols-2 rounded-[12px] border border-black/[0.08] bg-[#e9eaee] p-0.5 dark:border-white/[0.08] dark:bg-[#1d1e22]">
                   <TabsTrigger value="login" className={authTabClassName}>
                     登录
                   </TabsTrigger>
@@ -319,10 +315,7 @@ export default function LoginPage() {
                     </Button>
                   </form>
 
-                  <div className="mt-4 flex items-center justify-center gap-1.5 text-[12px] text-muted-foreground">
-                    <span className="text-[12px] text-muted-foreground">
-                      暂不登录？
-                    </span>
+                  <div className="mt-4 flex items-center justify-center">
                     <Button
                       type="button"
                       variant="ghost"
@@ -330,7 +323,7 @@ export default function LoginPage() {
                       onClick={handleVisitorLogin}
                       disabled={isLoading}
                     >
-                      {isLoading ? "登录中..." : "游客访问"}
+                      {isLoading ? "登录中..." : "游客登录"}
                     </Button>
                   </div>
                 </TabsContent>
