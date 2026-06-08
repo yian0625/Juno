@@ -1597,9 +1597,7 @@ code[data-streamdown='inline-code'] {
 }
 
 .dark .juno-composer {
-  background:
-    linear-gradient(180deg, rgba(48, 48, 49, 0.98), rgba(39, 39, 40, 0.98)),
-    #2b2b2c;
+  background: #2b2b2c;
   border-color: rgba(255, 255, 255, 0.06);
   box-shadow:
     0 12px 28px rgba(0, 0, 0, 0.34),
@@ -1609,8 +1607,7 @@ code[data-streamdown='inline-code'] {
 }
 
 .dark .juno-composer::before {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0) 36%);
+  background: none;
 }
 
 .dark .juno-composer::after {
