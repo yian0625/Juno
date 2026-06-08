@@ -176,7 +176,7 @@ export default function Inputbar({ onSend, onStop, inputRef }: Props) {
 
   return (
     <div className="juno-chat-composer shrink-0">
-      <div className="juno-composer max-w-[860px] mx-auto">
+      <div className="juno-composer max-w-[760px] mx-auto">
         <input
           ref={fileInputRef}
           type="file"
@@ -243,7 +243,7 @@ export default function Inputbar({ onSend, onStop, inputRef }: Props) {
                   {isUploading ? (
                     <div className="h-4 w-4 animate-spin border-2 border-current border-t-transparent rounded-full" />
                   ) : (
-                    <Plus className="h-6 w-6" />
+                    <Plus className="h-[18px] w-[18px]" />
                   )}
                 </button>
               </TooltipTrigger>
@@ -339,7 +339,7 @@ export default function Inputbar({ onSend, onStop, inputRef }: Props) {
                     aria-label={`当前模型：${modelDisplayName}`}
                   >
                     <span className="juno-composer-model-name">{compactModelLabel}</span>
-                    <ChevronDown className="h-4 w-4 opacity-70" />
+                    <ChevronDown className="h-3.5 w-3.5 opacity-70" />
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" side="top" sideOffset={10} className="juno-composer-model-menu w-[260px] p-1.5">
@@ -376,7 +376,7 @@ export default function Inputbar({ onSend, onStop, inputRef }: Props) {
                   (localInput.trim() || uploadedFiles.length > 0) && currentAssistantId ? "juno-send-button" : ""
                 )}
               >
-                <ArrowUp className="h-5 w-5" />
+                <ArrowUp className="h-4 w-4" />
               </Button>
             )}
           </div>

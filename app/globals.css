@@ -1528,7 +1528,7 @@ code[data-streamdown='inline-code'] {
 }
 
 .juno-chat-composer {
-  padding: 8px 14px 13px;
+  padding: 5px 18px 10px;
   background:
     linear-gradient(180deg, rgba(247, 247, 249, 0), rgba(247, 247, 249, 0.72) 38%, rgba(247, 247, 249, 0.94)),
     #f7f7f9;
@@ -1544,17 +1544,17 @@ code[data-streamdown='inline-code'] {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  width: min(880px, 100%);
+  width: min(760px, 100%);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(239, 240, 244, 0.92)),
     rgba(244, 245, 248, 0.9);
   border: 0.5px solid rgba(0, 0, 0, 0.1);
-  border-radius: 28px;
+  border-radius: 22px;
   -webkit-backdrop-filter: blur(30px) saturate(1.22);
   backdrop-filter: blur(30px) saturate(1.22);
   box-shadow:
-    0 15px 34px rgba(0, 0, 0, 0.1),
-    0 2px 7px rgba(0, 0, 0, 0.055),
+    0 10px 24px rgba(0, 0, 0, 0.085),
+    0 1px 4px rgba(0, 0, 0, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 0.82),
     inset 0 -1px 0 rgba(0, 0, 0, 0.045);
   transition:
@@ -1589,9 +1589,9 @@ code[data-streamdown='inline-code'] {
 .juno-composer:focus-within {
   border-color: rgba(0, 0, 0, 0.13);
   box-shadow:
-    0 16px 36px rgba(0, 0, 0, 0.12),
-    0 2px 7px rgba(0, 0, 0, 0.065),
-    0 0 0 2px rgba(0, 0, 0, 0.035),
+    0 12px 28px rgba(0, 0, 0, 0.1),
+    0 1px 5px rgba(0, 0, 0, 0.055),
+    0 0 0 1.5px rgba(0, 0, 0, 0.032),
     inset 0 1px 0 rgba(255, 255, 255, 0.86),
     inset 0 -1px 0 rgba(0, 0, 0, 0.045);
 }
@@ -1602,8 +1602,8 @@ code[data-streamdown='inline-code'] {
     #2b2b2c;
   border-color: rgba(255, 255, 255, 0.06);
   box-shadow:
-    0 15px 34px rgba(0, 0, 0, 0.35),
-    0 2px 7px rgba(0, 0, 0, 0.25),
+    0 12px 28px rgba(0, 0, 0, 0.34),
+    0 1px 5px rgba(0, 0, 0, 0.24),
     inset 0 1px 0 rgba(255, 255, 255, 0.045),
     inset 0 -1px 0 rgba(0, 0, 0, 0.58);
 }
@@ -1622,8 +1622,8 @@ code[data-streamdown='inline-code'] {
 .dark .juno-composer:focus-within {
   border-color: rgba(255, 255, 255, 0.1);
   box-shadow:
-    0 16px 36px rgba(0, 0, 0, 0.38),
-    0 2px 7px rgba(0, 0, 0, 0.26),
+    0 13px 30px rgba(0, 0, 0, 0.38),
+    0 1px 5px rgba(0, 0, 0, 0.26),
     0 0 0 1px rgba(255, 255, 255, 0.025),
     inset 0 1px 0 rgba(255, 255, 255, 0.06),
     inset 0 -1px 0 rgba(0, 0, 0, 0.56);
@@ -1643,12 +1643,12 @@ code[data-streamdown='inline-code'] {
 
 .juno-composer-textarea {
   display: block;
-  min-height: 92px;
-  max-height: 176px;
-  padding: 23px 24px 12px;
+  min-height: 60px;
+  max-height: 128px;
+  padding: 15px 18px 6px;
   color: color-mix(in oklab, var(--foreground) 94%, transparent);
-  font-size: 17px;
-  line-height: 1.54;
+  font-size: 14px;
+  line-height: 1.48;
   letter-spacing: 0;
   caret-color: #ff7a3d;
 }
@@ -1668,9 +1668,9 @@ code[data-streamdown='inline-code'] {
 .juno-composer-toolbar {
   position: relative;
   z-index: 3;
-  min-height: 58px;
-  padding: 0 16px 14px 18px;
-  gap: 12px;
+  min-height: 40px;
+  padding: 0 12px 10px 13px;
+  gap: 8px;
   background: transparent;
 }
 
@@ -1681,17 +1681,17 @@ code[data-streamdown='inline-code'] {
 .juno-composer-left-tools,
 .juno-composer-right-tools {
   min-width: 0;
-  gap: 12px;
+  gap: 8px;
 }
 
 .juno-composer-tool-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: 26px;
+  height: 26px;
   border: 0.5px solid transparent;
-  border-radius: 10px;
+  border-radius: 8px;
   color: color-mix(in oklab, var(--foreground) 52%, transparent);
   transition:
     background 0.16s ease,
@@ -1719,16 +1719,16 @@ code[data-streamdown='inline-code'] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 32px;
-  max-width: 174px;
-  padding: 0 4px;
-  gap: 7px;
+  height: 26px;
+  max-width: 140px;
+  padding: 0 5px;
+  gap: 5px;
   border: 0;
-  border-radius: 10px;
+  border-radius: 8px;
   background: transparent;
   color: #e8642a;
   box-shadow: none;
-  font-size: 15px;
+  font-size: 12.5px;
   font-weight: 500;
   letter-spacing: 0;
   white-space: nowrap;
@@ -1801,15 +1801,15 @@ code[data-streamdown='inline-code'] {
   align-items: center;
   justify-content: center;
   min-width: 0;
-  height: 32px;
-  max-width: 230px;
-  gap: 7px;
-  padding: 0 2px 0 8px;
+  height: 26px;
+  max-width: 150px;
+  gap: 5px;
+  padding: 0 2px 0 7px;
   border: 0;
-  border-radius: 10px;
+  border-radius: 8px;
   background: transparent;
   color: color-mix(in oklab, var(--foreground) 48%, transparent);
-  font-size: 15px;
+  font-size: 12.5px;
   letter-spacing: 0;
   white-space: nowrap;
   transition:
@@ -1845,8 +1845,8 @@ code[data-streamdown='inline-code'] {
 }
 
 .juno-composer-send {
-  width: 42px;
-  height: 42px;
+  width: 32px;
+  height: 32px;
   border-radius: 999px;
   color: color-mix(in oklab, var(--foreground) 78%, transparent);
   background: rgba(0, 0, 0, 0.09);
@@ -1885,13 +1885,13 @@ code[data-streamdown='inline-code'] {
 }
 
 .juno-composer-attachments {
-  padding: 16px 20px 0;
+  padding: 10px 14px 0;
 }
 
 .juno-composer-attachment {
   max-width: 180px;
-  min-height: 25px;
-  padding: 4px 6px 4px 8px;
+  min-height: 23px;
+  padding: 3px 6px 3px 8px;
   border: 0.5px solid rgba(255, 255, 255, 0.08);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.075);
