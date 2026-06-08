@@ -74,25 +74,12 @@ const AGENT_APPROVAL_OPTIONS: Array<{
   },
 ]
 
-function getModelDisplayName(model: { name?: string; model_name?: string; alias?: string } | undefined, fallback: string) {
-  return model?.name || model?.model_name || model?.alias || fallback
-}
-
-function getCompactModelLabel(label: string) {
-  return label
-    .replace(/^gpt[-\s]*/i, '')
-    .replace(/^juno[-\s]*/i, '')
-    .trim() || label
-}
-
 export default function Inputbar({ onSend, onStop, inputRef }: Props) {
   const isStreaming = useChatStore((s) => s.isStreaming)
   const currentAssistantId = useChatStore((s) => s.currentAssistantId)
   const assistants = useChatStore((s) => s.assistants)
   const setAssistants = useChatStore((s) => s.setAssistants)
   const currentModel = useChatStore((s) => s.currentModel)
-  const chatModels = useChatStore((s) => s.chatModels)
-  const changeCurrentModel = useChatStore((s) => s.changeCurrentModel)
   const allModelProfiles = useChatStore((s) => s.allModelProfiles)
   const uploadedFiles = useChatStore((s) => s.uploadedFiles)
   const setUploadedFiles = useChatStore((s) => s.setUploadedFiles)
@@ -106,9 +93,6 @@ export default function Inputbar({ onSend, onStop, inputRef }: Props) {
   // 判断当前模型方案是否支持图片生成
   const currentAssistant = assistants.find((a) => a.id === currentAssistantId)
   const currentProfile = allModelProfiles.find((p) => p.chat_model_alias === currentModel)
-  const selectedModel = chatModels.find((model) => model.alias === currentModel)
-  const modelDisplayName = getModelDisplayName(selectedModel, currentModel || "5.5")
-  const compactModelLabel = getCompactModelLabel(modelDisplayName)
   const profileSupportsImage = currentProfile?.image_generation_enabled === 1
   const imageGenEnabled = currentAssistant?.image_generation_enabled === 1
   const selectedApprovalOption = AGENT_APPROVAL_OPTIONS.find((item) => item.value === agentApprovalMode) || AGENT_APPROVAL_OPTIONS[0]
@@ -330,38 +314,6 @@ export default function Inputbar({ onSend, onStop, inputRef }: Props) {
             )}
           </div>
           <div className="juno-composer-right-tools flex items-center">
-            {chatModels.length > 0 && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button
-                    type="button"
-                    className="juno-composer-model-trigger"
-                    aria-label={`当前模型：${modelDisplayName}`}
-                  >
-                    <span className="juno-composer-model-name">{compactModelLabel}</span>
-                    <ChevronDown className="h-3.5 w-3.5 opacity-70" />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" side="top" sideOffset={10} className="juno-composer-model-menu w-[260px] p-1.5">
-                  {chatModels
-                    .filter((model) => model.alias)
-                    .map((model) => (
-                      <DropdownMenuItem
-                        key={`${model.provider}-${model.id}-${model.alias}`}
-                        className="juno-agent-permission-item"
-                        onSelect={() => {
-                          void changeCurrentModel(model.alias)
-                        }}
-                      >
-                        <span className="min-w-0 flex-1 truncate text-[13px]">
-                          {getModelDisplayName(model, model.alias)}
-                        </span>
-                        {model.alias === currentModel && <Check className="h-3.5 w-3.5 text-primary" />}
-                      </DropdownMenuItem>
-                    ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
             {isStreaming ? (
               <Button size="icon" variant="destructive" onClick={onStop} className="juno-composer-send shrink-0">
                 <Square className="h-3.5 w-3.5" />

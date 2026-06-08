@@ -1793,54 +1793,6 @@ code[data-streamdown='inline-code'] {
   box-shadow: none;
 }
 
-.juno-composer-model-trigger {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 0;
-  height: 26px;
-  max-width: 150px;
-  gap: 5px;
-  padding: 0 2px 0 7px;
-  border: 0;
-  border-radius: 8px;
-  background: transparent;
-  color: color-mix(in oklab, var(--foreground) 48%, transparent);
-  font-size: 12.5px;
-  letter-spacing: 0;
-  white-space: nowrap;
-  transition:
-    background 0.16s ease,
-    color 0.16s ease,
-    transform 0.16s ease;
-}
-
-.juno-composer-model-trigger:hover {
-  background: rgba(0, 0, 0, 0.045);
-  color: color-mix(in oklab, var(--foreground) 72%, transparent);
-}
-
-.juno-composer-model-trigger:active {
-  transform: scale(0.98);
-}
-
-.juno-composer-model-name {
-  color: color-mix(in oklab, var(--foreground) 76%, transparent);
-  font-weight: 590;
-}
-
-.juno-composer-model-effort {
-  overflow: hidden;
-  max-width: 104px;
-  color: rgba(245, 245, 247, 0.42);
-  font-weight: 500;
-  text-overflow: ellipsis;
-}
-
-.juno-composer-model-menu {
-  border-radius: 14px;
-}
-
 .juno-composer-send {
   width: 32px;
   height: 32px;
