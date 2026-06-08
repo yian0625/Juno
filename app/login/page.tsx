@@ -14,15 +14,15 @@ const authFieldClassName =
   "h-10 rounded-[10px] border-black/[0.10] bg-[#f3f4f7] px-3 text-[13px] shadow-[inset_0_1px_0_rgba(255,255,255,0.86)] placeholder:text-[#8b8f97] focus-visible:border-[#007aff]/60 focus-visible:bg-white focus-visible:ring-[3px] focus-visible:ring-[#007aff]/15 dark:border-white/[0.10] dark:bg-[#1b1c20] dark:shadow-none dark:placeholder:text-white/35 dark:focus-visible:bg-[#1d1e22]"
 
 const authPrimaryButtonClassName =
-  "h-10 rounded-[10px] bg-[#007aff] text-[13px] font-medium text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.28)] hover:bg-[#0071e3] active:translate-y-px dark:bg-[#0a84ff] dark:text-white dark:hover:bg-[#1991ff]"
+  "h-9 rounded-[9px] border border-[#007aff]/25 bg-[#0a84ff] text-[13px] font-medium text-white shadow-[0_1px_2px_rgba(0,122,255,0.20),inset_0_1px_0_rgba(255,255,255,0.24)] hover:bg-[#0077ed] active:translate-y-px active:shadow-[inset_0_1px_2px_rgba(0,0,0,0.18)] disabled:opacity-65 dark:border-[#4aa3ff]/20 dark:bg-[#0a84ff] dark:text-white dark:hover:bg-[#1991ff]"
 
 const authGhostButtonClassName =
-  "h-7 rounded-[8px] px-2.5 text-[12px] font-medium text-[#007aff] hover:bg-[#007aff]/10 hover:text-[#006bd6] dark:text-[#67b7ff] dark:hover:bg-white/[0.06] dark:hover:text-[#8bc8ff]"
+  "h-7 rounded-[8px] px-2 text-[12px] font-medium text-muted-foreground hover:bg-black/[0.04] hover:text-foreground dark:hover:bg-white/[0.055]"
 
 const authLabelClassName = "text-[12px] font-medium text-foreground/78"
 
 const authTabClassName =
-  "h-full rounded-[7px] text-[13px] font-medium text-muted-foreground data-[state=active]:bg-[#fbfbfd] data-[state=active]:text-foreground data-[state=active]:shadow-[0_1px_3px_rgba(0,0,0,0.13)] dark:data-[state=active]:border-transparent dark:data-[state=active]:bg-[#34363b] dark:data-[state=active]:shadow-none"
+  "h-full rounded-[7px] border border-transparent text-[13px] font-medium text-muted-foreground transition-colors focus-visible:border-transparent focus-visible:outline-none focus-visible:ring-0 data-[state=active]:border-black/[0.055] data-[state=active]:bg-[#fbfbfd] data-[state=active]:text-foreground data-[state=active]:shadow-[0_1px_2px_rgba(0,0,0,0.10),inset_0_1px_0_rgba(255,255,255,0.74)] dark:data-[state=active]:border-white/[0.08] dark:data-[state=active]:bg-[#34363b] dark:data-[state=active]:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
 
 type AuthFieldProps = React.ComponentProps<typeof Input> & {
   id: string
@@ -319,9 +319,9 @@ export default function LoginPage() {
                     </Button>
                   </form>
 
-                  <div className="mt-4 flex items-center justify-between rounded-[12px] border border-black/[0.07] bg-[#f4f5f8] px-3 py-2 dark:border-white/[0.08] dark:bg-[#1f2024]">
+                  <div className="mt-4 flex items-center justify-center gap-1.5 text-[12px] text-muted-foreground">
                     <span className="text-[12px] text-muted-foreground">
-                      暂不登录
+                      暂不登录？
                     </span>
                     <Button
                       type="button"
