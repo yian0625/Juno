@@ -9,7 +9,6 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { authAPI, setToken, setUser, getToken, getUser } from "@/lib/api"
 import { toast } from "@/hooks/use-toast"
-import { cn } from "@/lib/utils"
 
 const authFieldClassName =
   "h-10 rounded-[13px] border-black/[0.10] bg-[#f3f4f7] px-3 text-[13px] shadow-[inset_0_1px_0_rgba(255,255,255,0.86)] placeholder:text-[#8b8f97] focus-visible:border-[#007aff]/60 focus-visible:bg-white focus-visible:ring-[3px] focus-visible:ring-[#007aff]/15 dark:border-white/[0.10] dark:bg-[#1b1c20] dark:shadow-none dark:placeholder:text-white/35 dark:focus-visible:bg-[#1d1e22]"
@@ -23,7 +22,7 @@ const authGhostButtonClassName =
 const authLabelClassName = "text-[12px] font-medium text-foreground/78"
 
 const authTabClassName =
-  "juno-sidebar-switcher-button flex-1 h-8 rounded-[8px] text-[13px] font-medium text-center transition-colors duration-150 outline-none focus-visible:ring-0"
+  "h-full rounded-[9px] border border-transparent text-[13px] font-medium text-muted-foreground transition-colors focus-visible:border-transparent focus-visible:outline-none focus-visible:ring-0 data-[state=active]:border-black/[0.055] data-[state=active]:bg-[#fbfbfd] data-[state=active]:text-foreground data-[state=active]:shadow-[0_1px_2px_rgba(0,0,0,0.10),inset_0_1px_0_rgba(255,255,255,0.74)] dark:data-[state=active]:border-white/[0.08] dark:data-[state=active]:bg-[#34363b] dark:data-[state=active]:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
 
 type AuthFieldProps = React.ComponentProps<typeof Input> & {
   id: string
@@ -41,6 +40,42 @@ function AuthField({ id, label, className, ...props }: AuthFieldProps) {
         className={`${authFieldClassName} ${className ?? ""}`}
         {...props}
       />
+    </div>
+  )
+}
+
+function WorkspacePreview() {
+  return (
+    <div
+      aria-hidden="true"
+      className="mt-8 rounded-[18px] border border-black/[0.07] bg-[#f9fafc] p-3 shadow-[0_16px_42px_rgba(53,62,78,0.14)] dark:border-white/[0.07] dark:bg-[#1b1c20] dark:shadow-none"
+    >
+      <div className="flex items-center gap-2 border-b border-black/[0.06] pb-3 dark:border-white/[0.07]">
+        <div className="size-6 rounded-[7px] bg-[#dfe7f5] shadow-[inset_0_0_0_1px_rgba(0,122,255,0.10)] dark:bg-[#0a84ff]/18" />
+        <div className="h-2 w-20 rounded-full bg-[#cfd4dd] dark:bg-white/[0.14]" />
+        <div className="ml-auto size-5 rounded-full bg-[#eceff4] dark:bg-white/[0.08]" />
+      </div>
+      <div className="grid grid-cols-[70px_1fr] gap-3 pt-3">
+        <div className="space-y-2">
+          <div className="h-8 rounded-[10px] bg-[#007aff]/12 shadow-[inset_0_0_0_1px_rgba(0,122,255,0.08)] dark:bg-[#0a84ff]/18" />
+          <div className="h-8 rounded-[10px] bg-[#eef0f4] dark:bg-white/[0.055]" />
+          <div className="h-8 rounded-[10px] bg-[#eef0f4] dark:bg-white/[0.055]" />
+          <div className="h-8 rounded-[10px] bg-[#eef0f4] dark:bg-white/[0.055]" />
+        </div>
+        <div className="rounded-[15px] border border-black/[0.06] bg-white p-3 dark:border-white/[0.07] dark:bg-[#222328]">
+          <div className="mb-4 flex items-center justify-between">
+            <div className="h-2 w-24 rounded-full bg-[#cfd4dd] dark:bg-white/[0.14]" />
+            <div className="h-5 w-12 rounded-full bg-[#edf0f5] dark:bg-white/[0.08]" />
+          </div>
+          <div className="space-y-2">
+            <div className="h-2 w-full rounded-full bg-[#e2e5eb] dark:bg-white/[0.10]" />
+            <div className="h-2 w-10/12 rounded-full bg-[#e7e9ee] dark:bg-white/[0.075]" />
+            <div className="h-2 w-7/12 rounded-full bg-[#e7e9ee] dark:bg-white/[0.075]" />
+          </div>
+          <div className="mt-5 ml-auto h-8 w-24 rounded-[11px] bg-[#007aff]/14 shadow-[inset_0_0_0_1px_rgba(0,122,255,0.06)] dark:bg-[#0a84ff]/24" />
+          <div className="mt-3 h-8 rounded-[11px] bg-[#f1f3f7] dark:bg-white/[0.055]" />
+        </div>
+      </div>
     </div>
   )
 }
@@ -175,9 +210,35 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-[100dvh] items-center justify-center overflow-y-auto bg-[#eceef2] px-5 py-8 dark:bg-[#17181b]">
-      <main className="w-full max-w-[412px]">
-        <section className="overflow-hidden rounded-[26px] border border-black/[0.08] bg-[#fbfbfd] p-5 shadow-[0_24px_72px_rgba(35,42,54,0.16)] dark:border-white/[0.08] dark:bg-[#242529] dark:shadow-[0_28px_74px_rgba(0,0,0,0.48)] sm:p-7">
-              <div className="mb-6 flex items-center gap-3">
+      <main className="w-full max-w-[820px]">
+        <section className="grid overflow-hidden rounded-[26px] border border-black/[0.08] bg-[#f7f8fa] shadow-[0_28px_88px_rgba(35,42,54,0.18)] dark:border-white/[0.08] dark:bg-[#202124] dark:shadow-[0_28px_74px_rgba(0,0,0,0.48)] md:grid-cols-[0.96fr_1.04fr]">
+          <aside className="hidden min-h-[468px] flex-col border-r border-black/[0.07] bg-[#eef0f4] p-7 dark:border-white/[0.07] dark:bg-[#202124] md:flex">
+            <div className="flex items-center gap-3">
+              <div className="flex size-16 items-center justify-center rounded-[17px] border border-black/[0.06] bg-white shadow-[0_12px_30px_rgba(36,44,58,0.16)] dark:border-white/[0.10] dark:bg-[#2b2c31] dark:shadow-none">
+                <img
+                  src="/juno-logo-mark.svg"
+                  alt=""
+                  aria-hidden="true"
+                  className="size-[56px] rounded-[15px]"
+                />
+              </div>
+              <div>
+                <h1 className="text-[25px] font-semibold leading-tight text-foreground">
+                  Juno
+                </h1>
+                <p className="mt-1 text-[13px] text-muted-foreground">
+                  AI 助手工作台
+                </p>
+              </div>
+            </div>
+
+            <WorkspacePreview />
+
+          </aside>
+
+          <div className="bg-[#fbfbfd] p-5 sm:p-7 md:p-8 dark:bg-[#242529]">
+            <div className="mx-auto flex min-h-[418px] w-full max-w-[326px] flex-col justify-center">
+              <div className="mb-6 flex items-center gap-3 md:hidden">
                 <div className="flex size-12 items-center justify-center rounded-[14px] border border-black/[0.06] bg-white shadow-[0_8px_22px_rgba(36,44,58,0.12)] dark:border-white/[0.10] dark:bg-[#2b2c31] dark:shadow-none">
                   <img
                     src="/juno-logo-mark.svg"
@@ -210,27 +271,11 @@ export default function LoginPage() {
                 onValueChange={(value) => setAuthMode(value as "login" | "register")}
                 className="w-full gap-0"
               >
-                <TabsList className="juno-sidebar-switcher mb-5 grid h-9 w-full grid-cols-2 rounded-[12px] p-0.5">
-                  <TabsTrigger
-                    value="login"
-                    className={cn(
-                      authTabClassName,
-                      authMode === "login"
-                        ? "is-active text-foreground"
-                        : "text-muted-foreground hover:text-foreground",
-                    )}
-                  >
+                <TabsList className="mb-5 grid h-8 w-[174px] grid-cols-2 rounded-[12px] border border-black/[0.08] bg-[#e9eaee] p-0.5 dark:border-white/[0.08] dark:bg-[#1d1e22]">
+                  <TabsTrigger value="login" className={authTabClassName}>
                     登录
                   </TabsTrigger>
-                  <TabsTrigger
-                    value="register"
-                    className={cn(
-                      authTabClassName,
-                      authMode === "register"
-                        ? "is-active text-foreground"
-                        : "text-muted-foreground hover:text-foreground",
-                    )}
-                  >
+                  <TabsTrigger value="register" className={authTabClassName}>
                     注册
                   </TabsTrigger>
                 </TabsList>
@@ -344,6 +389,8 @@ export default function LoginPage() {
                   </form>
                 </TabsContent>
               </Tabs>
+            </div>
+          </div>
         </section>
       </main>
     </div>
